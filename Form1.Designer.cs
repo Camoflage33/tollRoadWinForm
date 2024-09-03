@@ -31,10 +31,11 @@
             this.vehicleWeight = new System.Windows.Forms.Label();
             this.tollCost = new System.Windows.Forms.Label();
             this.roadCap = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtVehicleWeights = new System.Windows.Forms.TextBox();
+            this.txtVehicleValues = new System.Windows.Forms.TextBox();
+            this.txtRoadCapacity = new System.Windows.Forms.TextBox();
             this.btnCalculate = new System.Windows.Forms.Button();
+            this.lstResult = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // vehicleWeight
@@ -67,26 +68,26 @@
             this.roadCap.TabIndex = 0;
             this.roadCap.Text = "Road Capacity";
             // 
-            // textBox1
+            // txtVehicleWeights
             // 
-            this.textBox1.Location = new System.Drawing.Point(252, 47);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtVehicleWeights.Location = new System.Drawing.Point(252, 47);
+            this.txtVehicleWeights.Name = "txtVehicleWeights";
+            this.txtVehicleWeights.Size = new System.Drawing.Size(100, 20);
+            this.txtVehicleWeights.TabIndex = 1;
             // 
-            // textBox2
+            // txtVehicleValues
             // 
-            this.textBox2.Location = new System.Drawing.Point(252, 101);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 1;
+            this.txtVehicleValues.Location = new System.Drawing.Point(252, 101);
+            this.txtVehicleValues.Name = "txtVehicleValues";
+            this.txtVehicleValues.Size = new System.Drawing.Size(100, 20);
+            this.txtVehicleValues.TabIndex = 1;
             // 
-            // textBox3
+            // txtRoadCapacity
             // 
-            this.textBox3.Location = new System.Drawing.Point(252, 162);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 1;
+            this.txtRoadCapacity.Location = new System.Drawing.Point(252, 162);
+            this.txtRoadCapacity.Name = "txtRoadCapacity";
+            this.txtRoadCapacity.Size = new System.Drawing.Size(100, 20);
+            this.txtRoadCapacity.TabIndex = 1;
             // 
             // btnCalculate
             // 
@@ -99,15 +100,24 @@
             this.btnCalculate.UseVisualStyleBackColor = true;
             this.btnCalculate.Click += new System.EventHandler(this.calculate_Click);
             // 
+            // lstResult
+            // 
+            this.lstResult.FormattingEnabled = true;
+            this.lstResult.Location = new System.Drawing.Point(437, 48);
+            this.lstResult.Name = "lstResult";
+            this.lstResult.Size = new System.Drawing.Size(296, 238);
+            this.lstResult.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 334);
+            this.Controls.Add(this.lstResult);
             this.Controls.Add(this.btnCalculate);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtRoadCapacity);
+            this.Controls.Add(this.txtVehicleValues);
+            this.Controls.Add(this.txtVehicleWeights);
             this.Controls.Add(this.roadCap);
             this.Controls.Add(this.tollCost);
             this.Controls.Add(this.vehicleWeight);
@@ -123,10 +133,11 @@
         private System.Windows.Forms.Label vehicleWeight;
         private System.Windows.Forms.Label tollCost;
         private System.Windows.Forms.Label roadCap;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtVehicleWeights;
+        private System.Windows.Forms.TextBox txtVehicleValues;
+        private System.Windows.Forms.TextBox txtRoadCapacity;
         private System.Windows.Forms.Button btnCalculate;
+        private System.Windows.Forms.ListBox lstResult;
     }
 }
 

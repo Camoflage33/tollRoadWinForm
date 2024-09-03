@@ -12,95 +12,114 @@ namespace tollRoadWinForm
 {
     public partial class Form1 : Form
     {
-        private object lstResult;
-
         public Form1()
         {
             InitializeComponent();
         }
 
         private void calculate_Click(object sender, EventArgs e)
-        {          
+        {
+            // Clear previous results
+            lstResult.Items.Clear();
 
-            // Knapsack algorithm adapted from previous code
-           int MaximizeVehicleFlow(int[] vehicleWeights, int[] vehicleValues, int roadCapacity)
+            // Input validation
+            if (string.IsNullOrWhiteSpace(txtVehicleWeights.Text) || string.IsNullOrWhiteSpace(txtVehicleValues.Text) || string.IsNullOrWhiteSpace(txtRoadCapacity.Text))
             {
-                int n = vehicleWeights.Length;
-                int[,] dp = new int[n + 1, roadCapacity + 1];
-
-                for (int i = 0; i <= n; i++)
-                {
-                    for (int w = 0; w <= roadCapacity; w++)
-                    {
-                        if (i == 0 || w == 0)
-                            dp[i, w] = 0;
-                        else if (vehicleWeights[i - 1] <= w)
-                            dp[i, w] = Math.Max(vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]], dp[i - 1, w]);
-                        else
-                            dp[i, w] = dp[i - 1, w];
-                    }
-                }
-
-                return dp[n, roadCapacity];
+                MessageBox.Show("Please enter all required fields.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-           void DisplayResult(int[] vehicleWeights, int[] vehicleValues, int roadCapacity)
+            try
             {
-                int n = vehicleWeights.Length;
-                bool[,] keep = new bool[n + 1, roadCapacity + 1];
-                int[,] dp = new int[n + 1, roadCapacity + 1];
+                int[] vehicleWeights = Array.ConvertAll(txtVehicleWeights.Text.Split(','), int.Parse);
+                int[] vehicleValues = Array.ConvertAll(txtVehicleValues.Text.Split(','), int.Parse);
+                int roadCapacity = int.Parse(txtRoadCapacity.Text);
 
-                for (int i = 1; i <= n; i++)
+                if (vehicleWeights.Length != vehicleValues.Length)
                 {
-                    for (int w = 0; w <= roadCapacity; w++)
-                    {
-                        if (vehicleWeights[i - 1] <= w && vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]] > dp[i - 1, w])
-                        {
-                            dp[i, w] = vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]];
-                            keep[i, w] = true;
-                        }
-                        else
-                        {
-                            dp[i, w] = dp[i - 1, w];
-                        }
-                    }
+                    MessageBox.Show("Vehicle Weights and Toll Costs must have the same number of entries.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
 
-                int K = roadCapacity;
-                lstResult.Items.Clear();
-                lstResult.Items.Add("Selected vehicles for optimal flow:");
-                for (int i = n; i > 0; i--)
+                if (roadCapacity <= 0)
                 {
-                    if (keep[i, K])
+                    MessageBox.Show("Road Capacity must be a positive number.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int maxFlowValue = MaximizeVehicleFlow(vehicleWeights, vehicleValues, roadCapacity);
+                lstResult.Items.Add($"Maximum Value of Vehicle Flow: {maxFlowValue}");
+                lstResult.Items.Add("");
+
+                DisplayResult(vehicleWeights, vehicleValues, roadCapacity);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Please enter valid numeric values.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Knapsack algorithm to maximize vehicle flow
+        private int MaximizeVehicleFlow(int[] vehicleWeights, int[] vehicleValues, int roadCapacity)
+        {
+            int n = vehicleWeights.Length;
+            int[,] dp = new int[n + 1, roadCapacity + 1];
+
+            for (int i = 0; i <= n; i++)
+            {
+                for (int w = 0; w <= roadCapacity; w++)
+                {
+                    if (i == 0 || w == 0)
+                        dp[i, w] = 0;
+                    else if (vehicleWeights[i - 1] <= w)
+                        dp[i, w] = Math.Max(vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]], dp[i - 1, w]);
+                    else
+                        dp[i, w] = dp[i - 1, w];
+                }
+            }
+
+            return dp[n, roadCapacity];
+        }
+
+        // Method to display the selected vehicles for optimal flow
+        private void DisplayResult(int[] vehicleWeights, int[] vehicleValues, int roadCapacity)
+        {
+            int n = vehicleWeights.Length;
+            bool[,] keep = new bool[n + 1, roadCapacity + 1];
+            int[,] dp = new int[n + 1, roadCapacity + 1];
+
+            for (int i = 1; i <= n; i++)
+            {
+                for (int w = 0; w <= roadCapacity; w++)
+                {
+                    if (vehicleWeights[i - 1] <= w && vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]] > dp[i - 1, w])
                     {
-                        lstResult.Items.Add($"Vehicle Type {i} (Weight: {vehicleWeights[i - 1]}, Value: {vehicleValues[i - 1]})");
-                        K -= vehicleWeights[i - 1];
+                        dp[i, w] = vehicleValues[i - 1] + dp[i - 1, w - vehicleWeights[i - 1]];
+                        keep[i, w] = true;
+                    }
+                    else
+                    {
+                        dp[i, w] = dp[i - 1, w];
                     }
                 }
             }
 
-            private void btnCalculate_Click(object sender, EventArgs e)
+            int K = roadCapacity;
+            lstResult.Items.Add("Selected vehicles for optimal flow:");
+            for (int i = n; i > 0; i--)
             {
-                try
+                if (keep[i, K])
                 {
-                    int[] vehicleWeights = Array.ConvertAll(txtVehicleWeights.Text.Split(','), int.Parse);
-                    int[] vehicleValues = Array.ConvertAll(txtVehicleValues.Text.Split(','), int.Parse);
-                    int roadCapacity = int.Parse(txtRoadCapacity.Text);
-
-                    int maxFlowValue = MaximizeVehicleFlow(vehicleWeights, vehicleValues, roadCapacity);
-                    lstResult.Items.Add($"Maximum Value of Vehicle Flow: {maxFlowValue}");
-                    lstResult.Items.Add("");
-
-                    DisplayResult(vehicleWeights, vehicleValues, roadCapacity);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message, "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    lstResult.Items.Add($"Vehicle Type {i} (Weight: {vehicleWeights[i - 1]}, Value: {vehicleValues[i - 1]})");
+                    K -= vehicleWeights[i - 1];
                 }
             }
         }
+
+        
     }
-
 }
-    
-
