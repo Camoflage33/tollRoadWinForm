@@ -120,6 +120,99 @@ namespace tollRoadWinForm
             }
         }
 
+     
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Set placeholder example text
+            SetPlaceholders();
+
+            // tooltips for guidance
+            ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(txtVehicleWeights, "Enter the weight of each vehicle type, separated by commas (e.g., 2,5,8).");
+            toolTip.SetToolTip(txtVehicleValues, "Enter the value for each vehicle type in the same order as the weights.");
+            toolTip.SetToolTip(txtRoadCapacity, "Enter the total capacity of the road.");
+        }
+
         
+        private void SetPlaceholders()
+        {
+            //Placeholders 
+            txtVehicleWeights.Text = "e.g., 2,5,8";  
+            txtVehicleValues.Text = "e.g., 10,15,20";  
+            txtRoadCapacity.Text = "e.g., 10"; 
+
+            txtVehicleWeights.ForeColor = Color.Gray;  
+            txtVehicleValues.ForeColor = Color.Gray;
+            txtRoadCapacity.ForeColor = Color.Gray;
+        }
+
+        //Event handlers for when to space is presse to turn it back normal and make it empty or if something else is chosen to make it show exmples.
+        private void txtVehicleWeights_Enter(object sender, EventArgs e)
+        {
+            if (txtVehicleWeights.Text == "e.g., 2,5,8")
+            {
+                txtVehicleWeights.Text = "";  
+                txtVehicleWeights.ForeColor = Color.Black;  
+            }
+        }
+
+       
+        private void txtVehicleWeights_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtVehicleWeights.Text))
+            {
+                txtVehicleWeights.Text = "e.g., 2,5,8";  
+                txtVehicleWeights.ForeColor = Color.Gray;  
+            }
+        }
+
+        
+        private void txtVehicleValues_Enter(object sender, EventArgs e)
+        {
+            if (txtVehicleValues.Text == "e.g., 10,15,20")
+            {
+                txtVehicleValues.Text = "";
+                txtVehicleValues.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtVehicleValues_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtVehicleValues.Text))
+            {
+                txtVehicleValues.Text = "e.g., 10,15,20";
+                txtVehicleValues.ForeColor = Color.Gray;
+            }
+        }
+
+        
+        private void txtRoadCapacity_Enter(object sender, EventArgs e)
+        {
+            if (txtRoadCapacity.Text == "e.g., 10")
+            {
+                txtRoadCapacity.Text = "";
+                txtRoadCapacity.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtRoadCapacity_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtRoadCapacity.Text))
+            {
+                txtRoadCapacity.Text = "e.g., 10";
+                txtRoadCapacity.ForeColor = Color.Gray;
+            }
+        }
+
+        // Reset for all
+        private void Reset_Click(object sender, EventArgs e)
+        {
+           
+            lstResult.Items.Clear();
+
+            SetPlaceholders();  
+        }
+
+
     }
 }
